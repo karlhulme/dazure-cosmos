@@ -16,11 +16,10 @@ jobs:
 
     steps:
       - name: Setup repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Deno
-        # uses: denoland/setup-deno@v1
-        uses: denoland/setup-deno@004814556e37c54a2f6e31384c9e18e983317366
+        uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
 
@@ -30,12 +29,6 @@ jobs:
       - name: Run linter
         run: deno lint
 
-      - name: Setup cosmos
-        run: deno task setup_cosmos
-
-      - name: Run tests
-        run: deno task test
-
-      - name: Cleanup cosmos
-        if: success() || failure()
-        run: deno task teardown_cosmos
+      # No tests yet!!
+      # - name: Run tests
+      #   run: deno task test
