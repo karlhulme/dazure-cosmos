@@ -11,6 +11,12 @@ Support for:
 - Querying a container using the gateway.
 - Querying multiple physicl containers using pkranges.
 
+## Todo
+
+- Read x-ms-session-token from response and use it subsequent requests so that a
+  single instance of this engine will always be reading it's own writes.
+- This can be the first test!!
+
 ## Environment variables
 
 You will need to set the following environment variables to run the tests:
