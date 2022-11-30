@@ -3,13 +3,21 @@ import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
+interface ReplaceDocumentResult {
+  didReplace: boolean;
+  sessionToken: string;
+  requestCharge: number;
+  requestDurationMilliseconds: number;
+}
+
 interface ReplaceDocumentOptions {
   ifMatch?: string;
+  sessionToken?: string;
 }
 
 /**
  * Returns true if the document was successfully replaced.  Returns false
- * of the specified version is not found and the document is not replaced.
+ * if the specified version is not found and the document is not replaced.
  * In all other cases an error is raised.
  */
 export async function replaceDocument(
@@ -20,7 +28,7 @@ export async function replaceDocument(
   partition: string,
   document: Record<string, unknown>,
   options: ReplaceDocumentOptions,
-): Promise<boolean> {
+): Promise<ReplaceDocumentResult> {
   const reqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
     method: "PUT",
@@ -29,11 +37,15 @@ export async function replaceDocument(
       `dbs/${databaseName}/colls/${collectionName}/docs/${document.id}`,
   });
 
-  const didReplace = await cosmosRetryable(async () => {
+  const result = await cosmosRetryable(async () => {
     const optionalHeaders: Record<string, string> = {};
 
     if (options.ifMatch) {
       optionalHeaders["If-Match"] = options.ifMatch;
+    }
+
+    if (options.sessionToken) {
+      optionalHeaders["x-ms-session-token"] = options.sessionToken;
     }
 
     if (document.partitionKey !== partition) {
@@ -60,6 +72,9 @@ export async function replaceDocument(
 
     handleCosmosTransitoryErrors(response);
 
+    // 412 errors means the pre-condition failed and the document
+    // wasn't updated.  In this circumstance we cancel reading from
+    // the stream and return false.
     if (!response.ok && response.status !== 412) {
       throw new Error(
         `Unable to replace document ${databaseName}/${collectionName}/${document.id}.\n${await response
@@ -69,8 +84,17 @@ export async function replaceDocument(
 
     await response.body?.cancel();
 
-    return response.ok;
+    return {
+      didReplace: response.ok,
+      sessionToken: response.headers.get("x-ms-session-token") as string,
+      requestCharge: parseFloat(
+        response.headers.get("x-ms-request-charge") as string,
+      ),
+      requestDurationMilliseconds: parseFloat(
+        response.headers.get("x-ms-request-duration-ms") as string,
+      ),
+    };
   });
 
-  return didReplace;
+  return result;
 }

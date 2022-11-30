@@ -1,0 +1,41 @@
+{
+  "scriptId": "35",
+  "url": "deno:ext/fetch/23_response.js",
+  "functions": [
+    {
+      "functionName": "nullBodyStatus",
+      "ranges": [{ "startOffset": 2486, "endOffset": 2604, "count": 4 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "redirectStatus",
+      "ranges": [{ "startOffset": 2672, "endOffset": 2814, "count": 4 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 6323, "endOffset": 6379, "count": 8 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get status",
+      "ranges": [{ "startOffset": 10069, "endOffset": 10179, "count": 13 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get ok",
+      "ranges": [{ "startOffset": 10227, "endOffset": 10386, "count": 4 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get headers",
+      "ranges": [{ "startOffset": 10602, "endOffset": 10705, "count": 5 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "fromInnerResponse",
+      "ranges": [{ "startOffset": 13571, "endOffset": 13797, "count": 4 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

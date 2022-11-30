@@ -3,6 +3,16 @@ import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
+interface GetDocumentOptions {
+  sessionToken?: string;
+}
+
+interface GetDocumentResult {
+  doc: Record<string, unknown> | null;
+  requestCharge: number;
+  requestDurationMilliseconds: number;
+}
+
 export async function getDocument(
   cryptoKey: CryptoKey,
   cosmosUrl: string,
@@ -10,7 +20,8 @@ export async function getDocument(
   collectionName: string,
   partition: string,
   documentId: string,
-): Promise<Record<string, unknown> | null> {
+  options: GetDocumentOptions,
+): Promise<GetDocumentResult> {
   const reqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
     method: "GET",
@@ -19,7 +30,13 @@ export async function getDocument(
       `dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
   });
 
-  const doc = await cosmosRetryable(async () => {
+  const optionalHeaders: Record<string, string> = {};
+
+  if (options.sessionToken) {
+    optionalHeaders["x-ms-session-token"] = options.sessionToken;
+  }
+
+  const result = await cosmosRetryable(async () => {
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
       {
@@ -31,6 +48,7 @@ export async function getDocument(
           "x-ms-documentdb-partitionkey": formatPartitionKeyValue(
             partition,
           ),
+          ...optionalHeaders,
         },
       },
     );
@@ -44,14 +62,30 @@ export async function getDocument(
       );
     }
 
+    const requestCharge = parseFloat(
+      response.headers.get("x-ms-request-charge") as string,
+    );
+
+    const requestDurationMilliseconds = parseFloat(
+      response.headers.get("x-ms-request-duration-ms") as string,
+    );
+
     if (response.status === 404) {
       await response.body?.cancel();
-      return null;
+      return {
+        doc: null,
+        requestCharge,
+        requestDurationMilliseconds,
+      };
     } else {
-      const result = await response.json() as Record<string, unknown>;
-      return result;
+      const doc = await response.json() as Record<string, unknown>;
+      return {
+        doc,
+        requestCharge,
+        requestDurationMilliseconds,
+      };
     }
   });
 
-  return doc;
+  return result;
 }

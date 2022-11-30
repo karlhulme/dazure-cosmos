@@ -1,0 +1,29 @@
+{
+  "scriptId": "213",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/src/listDatabases.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1087, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "listDatabases",
+      "ranges": [{ "startOffset": 219, "endOffset": 1086, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        { "startOffset": 450, "endOffset": 1065, "count": 1 },
+        { "startOffset": 868, "endOffset": 963, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 1046, "endOffset": 1057, "count": 2 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

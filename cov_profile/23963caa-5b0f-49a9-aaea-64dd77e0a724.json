@@ -1,0 +1,46 @@
+{
+  "scriptId": "226",
+  "url": "https://deno.land/x/mock@0.13.0/asserts.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 7487, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertPassthrough",
+      "ranges": [{ "startOffset": 257, "endOffset": 2161, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertSpyCalls",
+      "ranges": [{ "startOffset": 2242, "endOffset": 2618, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertSpyCallsMin",
+      "ranges": [{ "startOffset": 2696, "endOffset": 2868, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertSpyCall",
+      "ranges": [{ "startOffset": 2950, "endOffset": 4724, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertSpyCallAsync",
+      "ranges": [{ "startOffset": 4813, "endOffset": 6644, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertSpyCallArg",
+      "ranges": [{ "startOffset": 6752, "endOffset": 6951, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertSpyCallArgs",
+      "ranges": [{ "startOffset": 6952, "endOffset": 7456, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "scriptId": "224",
+  "url": "https://deno.land/x/mock@0.13.0/time.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 11100, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "TimeError",
+      "ranges": [{ "startOffset": 322, "endOffset": 406, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "isFakeDate",
+      "ranges": [{ "startOffset": 409, "endOffset": 483, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "FakeDateConstructor",
+      "ranges": [{ "startOffset": 484, "endOffset": 758, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "now",
+      "ranges": [{ "startOffset": 792, "endOffset": 851, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 856, "endOffset": 977, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 1187, "endOffset": 1430, "count": 47 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "FakeDate.<computed>",
+      "ranges": [{ "startOffset": 1259, "endOffset": 1427, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 1486, "endOffset": 1729, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "FakeDate.<computed>",
+      "ranges": [{ "startOffset": 1558, "endOffset": 1726, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "timerId",
+      "ranges": [{ "startOffset": 1732, "endOffset": 1796, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [{ "startOffset": 1961, "endOffset": 11099, "count": 0 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "scriptId": "240",
+  "url": "https://deno.land/x/collections@0.11.2/vector.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 22816, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "positiveIndex",
+      "ranges": [{ "startOffset": 83, "endOffset": 327, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "reduce",
+      "ranges": [{ "startOffset": 328, "endOffset": 900, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [{ "startOffset": 1139, "endOffset": 22815, "count": 0 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

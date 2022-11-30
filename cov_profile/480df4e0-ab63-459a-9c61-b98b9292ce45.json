@@ -1,0 +1,16 @@
+{
+  "scriptId": "244",
+  "url": "https://deno.land/x/collections@0.11.2/trees/bs_tree.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 8646, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [{ "startOffset": 294, "endOffset": 8645, "count": 0 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

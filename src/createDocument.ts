@@ -5,6 +5,14 @@ import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
 interface CreateDocumentOptions {
   upsertDocument?: boolean;
+  sessionToken?: string;
+}
+
+interface CreateDocumentResult {
+  didCreate: boolean;
+  sessionToken: string;
+  requestCharge: number;
+  requestDurationMilliseconds: number;
 }
 
 /**
@@ -20,7 +28,7 @@ export async function createDocument(
   partition: string,
   document: Record<string, unknown>,
   options: CreateDocumentOptions,
-): Promise<boolean> {
+): Promise<CreateDocumentResult> {
   const reqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
     method: "POST",
@@ -28,11 +36,15 @@ export async function createDocument(
     resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
   });
 
-  const didCreate = await cosmosRetryable(async () => {
+  const result = await cosmosRetryable(async () => {
     const optionalHeaders: Record<string, string> = {};
 
     if (options.upsertDocument) {
       optionalHeaders["x-ms-documentdb-is-upsert"] = "True";
+    }
+
+    if (options.sessionToken) {
+      optionalHeaders["x-ms-session-token"] = options.sessionToken;
     }
 
     if (document.partitionKey !== partition) {
@@ -68,8 +80,17 @@ export async function createDocument(
 
     await response.body?.cancel();
 
-    return response.status === 201;
+    return {
+      didCreate: response.status === 201,
+      sessionToken: response.headers.get("x-ms-session-token") as string,
+      requestCharge: parseFloat(
+        response.headers.get("x-ms-request-charge") as string,
+      ),
+      requestDurationMilliseconds: parseFloat(
+        response.headers.get("x-ms-request-duration-ms") as string,
+      ),
+    };
   });
 
-  return didCreate;
+  return result;
 }

@@ -1,0 +1,11 @@
+{
+  "scriptId": "198",
+  "url": "https://raw.githubusercontent.com/karlhulme/dpiggle/main/mod.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 76, "count": 1 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

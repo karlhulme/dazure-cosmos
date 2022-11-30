@@ -1,0 +1,14 @@
+{
+  "scriptId": "19",
+  "url": "deno:ext/web/05_base64.js",
+  "functions": [
+    {
+      "functionName": "atob",
+      "ranges": [
+        { "startOffset": 570, "endOffset": 1069, "count": 3 },
+        { "startOffset": 855, "endOffset": 1065, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

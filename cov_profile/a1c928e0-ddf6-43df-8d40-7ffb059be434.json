@@ -1,0 +1,21 @@
+{
+  "scriptId": "239",
+  "url": "https://deno.land/x/collections@0.11.2/comparators.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 690, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "ascend",
+      "ranges": [{ "startOffset": 206, "endOffset": 364, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "descend",
+      "ranges": [{ "startOffset": 530, "endOffset": 689, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

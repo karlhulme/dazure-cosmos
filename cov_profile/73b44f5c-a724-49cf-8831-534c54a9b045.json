@@ -1,0 +1,23 @@
+{
+  "scriptId": "194",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/test/lifeCycle.test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        { "startOffset": 0, "endOffset": 2369, "count": 1 },
+        { "startOffset": 321, "endOffset": 375, "count": 0 },
+        { "startOffset": 446, "endOffset": 500, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        { "startOffset": 598, "endOffset": 2366, "count": 1 },
+        { "startOffset": 916, "endOffset": 987, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

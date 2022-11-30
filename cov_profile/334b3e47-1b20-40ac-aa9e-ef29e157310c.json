@@ -1,0 +1,11 @@
+{
+  "scriptId": "195",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/deps.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 525, "count": 1 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

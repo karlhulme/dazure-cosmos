@@ -13,9 +13,8 @@ Support for:
 
 ## Todo
 
-- Read x-ms-session-token from response and use it subsequent requests so that a
-  single instance of this engine will always be reading it's own writes.
-- This can be the first test!!
+- Complete test coverage
+- Complete comments
 
 ## Environment variables
 

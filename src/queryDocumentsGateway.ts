@@ -3,6 +3,10 @@ import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
+interface QueryDocumentsGatewayOptions {
+  sessionToken?: string;
+}
+
 /**
  * A parameter that is substituted into a Cosmos query.
  */
@@ -31,7 +35,12 @@ interface QueryDocumentsGatewayResult {
   /**
    * The resultant cost of the query.
    */
-  queryCharge: number;
+  requestCharge: number;
+
+  /**
+   * The duration of the request in milliseconds.
+   */
+  requestDurationMilliseconds: number;
 }
 
 /**
@@ -47,6 +56,7 @@ interface QueryDocumentsGatewayResult {
  * ensure the query can be satisfied by a single container.
  * @param query The query to execute.
  * @param parameters The parameter to substitute into the query.
+ * @param options An options property bag.
  */
 export async function queryDocumentsGateway(
   cryptoKey: CryptoKey,
@@ -56,6 +66,7 @@ export async function queryDocumentsGateway(
   partition: string,
   query: string,
   parameters: CosmosQueryParameter[],
+  options: QueryDocumentsGatewayOptions,
 ): Promise<QueryDocumentsGatewayResult> {
   const reqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
@@ -67,7 +78,8 @@ export async function queryDocumentsGateway(
   const records: Record<string, unknown>[] = [];
 
   let continuationToken: string | null = null;
-  let queryCharge = 0.0;
+  let requestCharge = 0.0;
+  let requestDurationMilliseconds = 0.0;
   let isAllRecordsLoaded = false;
 
   while (!isAllRecordsLoaded) {
@@ -75,6 +87,10 @@ export async function queryDocumentsGateway(
 
     if (continuationToken) {
       optionalHeaders["x-ms-continuation"] = continuationToken;
+    }
+
+    if (options.sessionToken) {
+      optionalHeaders["x-ms-session-token"] = options.sessionToken;
     }
 
     await cosmosRetryable(async () => {
@@ -116,8 +132,12 @@ export async function queryDocumentsGateway(
         isAllRecordsLoaded = true;
       }
 
-      queryCharge += parseFloat(
+      requestCharge += parseFloat(
         response.headers.get("x-ms-request-charge") as string,
+      );
+
+      requestDurationMilliseconds += parseFloat(
+        response.headers.get("x-ms-request-duration-ms") as string,
       );
 
       const result = await response.json();
@@ -128,6 +148,7 @@ export async function queryDocumentsGateway(
 
   return {
     records,
-    queryCharge,
+    requestCharge,
+    requestDurationMilliseconds,
   };
 }

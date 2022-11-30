@@ -1,0 +1,26 @@
+{
+  "scriptId": "214",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/src/queryDocumentsContainersDirect.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 7123, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "queryDocumentsContainersDirect",
+      "ranges": [{ "startOffset": 1381, "endOffset": 3228, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getPkRangesForContainer",
+      "ranges": [{ "startOffset": 3229, "endOffset": 4592, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getValueArrayForPkRange",
+      "ranges": [{ "startOffset": 4593, "endOffset": 7122, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

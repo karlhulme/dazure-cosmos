@@ -1,0 +1,26 @@
+{
+  "scriptId": "206",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/src/deleteCollection.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1304, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "deleteCollection",
+      "ranges": [{ "startOffset": 219, "endOffset": 1303, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        { "startOffset": 559, "endOffset": 1280, "count": 1 },
+        { "startOffset": 1046, "endOffset": 1072, "count": 0 },
+        { "startOffset": 1074, "endOffset": 1172, "count": 0 },
+        { "startOffset": 1200, "endOffset": 1208, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

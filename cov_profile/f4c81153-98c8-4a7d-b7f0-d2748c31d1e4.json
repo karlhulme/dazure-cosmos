@@ -1,0 +1,16 @@
+{
+  "scriptId": "212",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/src/listCollections.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1186, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "listCollections",
+      "ranges": [{ "startOffset": 219, "endOffset": 1185, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "scriptId": "115",
+  "url": "",
+  "functions": [
+    {
+      "functionName": "op_crypto_sign_key",
+      "ranges": [
+        { "startOffset": 151, "endOffset": 679, "count": 4 },
+        { "startOffset": 369, "endOffset": 526, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

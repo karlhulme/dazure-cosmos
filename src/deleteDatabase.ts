@@ -2,11 +2,15 @@ import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 
+interface DeleteDatabaseResult {
+  didDelete: boolean;
+}
+
 export async function deleteDatabase(
   cryptoKey: CryptoKey,
   cosmosUrl: string,
   databaseName: string,
-) {
+): Promise<DeleteDatabaseResult> {
   const reqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
     method: "DELETE",
@@ -14,7 +18,7 @@ export async function deleteDatabase(
     resourceLink: `dbs/${databaseName}`,
   });
 
-  await cosmosRetryable(async () => {
+  const result = await cosmosRetryable(async () => {
     const response = await fetch(`${cosmosUrl}/dbs/${databaseName}`, {
       method: "DELETE",
       headers: {
@@ -32,5 +36,11 @@ export async function deleteDatabase(
     }
 
     await response.body?.cancel();
+
+    return {
+      didDelete: response.ok,
+    };
   });
+
+  return result;
 }

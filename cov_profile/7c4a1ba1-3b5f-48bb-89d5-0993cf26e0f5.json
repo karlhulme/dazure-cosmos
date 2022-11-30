@@ -1,0 +1,29 @@
+{
+  "scriptId": "210",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/src/getDocument.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 2227, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getDocument",
+      "ranges": [
+        { "startOffset": 291, "endOffset": 2226, "count": 1 },
+        { "startOffset": 694, "endOffset": 771, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        { "startOffset": 813, "endOffset": 2203, "count": 1 },
+        { "startOffset": 1409, "endOffset": 1435, "count": 0 },
+        { "startOffset": 1437, "endOffset": 1578, "count": 0 },
+        { "startOffset": 1809, "endOffset": 2001, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

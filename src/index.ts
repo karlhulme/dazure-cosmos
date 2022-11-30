@@ -2,6 +2,7 @@ export * from "./convertCosmosKeyToCryptoKey.ts";
 export * from "./createCollection.ts";
 export * from "./createDatabase.ts";
 export * from "./createDocument.ts";
+export * from "./deleteCollection.ts";
 export * from "./deleteDatabase.ts";
 export * from "./deleteDocument.ts";
 export * from "./getCollection.ts";

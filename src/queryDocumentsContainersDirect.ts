@@ -9,6 +9,10 @@ import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts"
 // More information at this link:
 // https://docs.microsoft.com/en-us/rest/api/cosmos-db/querying-cosmosdb-resources-using-the-rest-api
 
+interface QueryDocumentsContainerOptions {
+  sessionToken?: string;
+}
+
 /**
  * A parameter that is substituted into a Cosmos query.
  */
@@ -36,7 +40,7 @@ interface QueryDocumentsContainerDirectResult {
   /**
    * The resultant cost of the query.
    */
-  queryCharge: number;
+  requestCharge: number;
 }
 
 /**
@@ -60,6 +64,7 @@ interface QueryDocumentsContainerDirectResult {
  * Although this transform could cull the result set to meet a
  * specific limit, this is rarely useful since the documents have
  * already been retrieved.
+ * @param options An options property bag.
  */
 export async function queryDocumentsContainersDirect(
   cryptoKey: CryptoKey,
@@ -69,6 +74,7 @@ export async function queryDocumentsContainersDirect(
   query: string,
   parameters: CosmosQueryParameter[],
   transform: "concatArrays" | "sum",
+  options: QueryDocumentsContainerOptions,
 ): Promise<QueryDocumentsContainerDirectResult> {
   // Retrieve the pk ranges for the collection.  This can change at
   // any time so we perform this lookup on each query.
@@ -80,6 +86,7 @@ export async function queryDocumentsContainersDirect(
     cosmosUrl,
     databaseName,
     collectionName,
+    options,
   );
 
   /**
@@ -98,6 +105,7 @@ export async function queryDocumentsContainersDirect(
       pkr,
       query,
       parameters,
+      options,
     )
   );
 
@@ -106,12 +114,14 @@ export async function queryDocumentsContainersDirect(
 
   // Combine the arrays.  Using push may be faster than concat:
   // https://dev.to/uilicious/javascript-array-push-is-945x-faster-than-array-concat-1oki
-  let queryCharge = 0.0;
+  let requestCharge = 0.0;
+  let requestDurationMilliseconds = 0.0;
   const combinedValueArray: unknown[] = [];
 
   for (const containerResult of arrayOfContainerResults) {
     combinedValueArray.push(...containerResult.records);
-    queryCharge += containerResult.queryCharge;
+    requestCharge += containerResult.requestCharge;
+    requestDurationMilliseconds += containerResult.requestDurationMilliseconds;
   }
 
   const data = transform === "sum"
@@ -123,7 +133,7 @@ export async function queryDocumentsContainersDirect(
 
   return {
     data,
-    queryCharge,
+    requestCharge,
   };
 }
 
@@ -132,6 +142,7 @@ async function getPkRangesForContainer(
   cosmosUrl: string,
   databaseName: string,
   collectionName: string,
+  options: QueryDocumentsContainerOptions,
 ) {
   const pkRangesReqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
@@ -139,6 +150,12 @@ async function getPkRangesForContainer(
     resourceType: "pkranges",
     resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
   });
+
+  const optionalHeaders: Record<string, string> = {};
+
+  if (options.sessionToken) {
+    optionalHeaders["x-ms-session-token"] = options.sessionToken;
+  }
 
   const pkRanges = await cosmosRetryable(async () => {
     const response = await fetch(
@@ -149,6 +166,7 @@ async function getPkRangesForContainer(
           Authorization: pkRangesReqHeaders.authorizationHeader,
           "x-ms-date": pkRangesReqHeaders.xMsDateHeader,
           "x-ms-version": pkRangesReqHeaders.xMsVersion,
+          ...optionalHeaders,
         },
       },
     );
@@ -184,6 +202,7 @@ async function getValueArrayForPkRange(
   pkRange: string,
   query: string,
   parameters: CosmosQueryParameter[],
+  options: QueryDocumentsContainerOptions,
 ) {
   const reqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
@@ -195,7 +214,8 @@ async function getValueArrayForPkRange(
   const records: unknown[] = [];
 
   let continuationToken: string | null = null;
-  let queryCharge = 0.0;
+  let requestCharge = 0.0;
+  let requestDurationMilliseconds = 0.0;
   let isAllRecordsLoaded = false;
 
   while (!isAllRecordsLoaded) {
@@ -203,6 +223,10 @@ async function getValueArrayForPkRange(
 
     if (continuationToken) {
       optionalHeaders["x-ms-continuation"] = continuationToken;
+    }
+
+    if (options.sessionToken) {
+      optionalHeaders["x-ms-session-token"] = options.sessionToken;
     }
 
     await cosmosRetryable(async () => {
@@ -243,8 +267,12 @@ async function getValueArrayForPkRange(
         isAllRecordsLoaded = true;
       }
 
-      queryCharge += parseFloat(
+      requestCharge += parseFloat(
         response.headers.get("x-ms-request-charge") as string,
+      );
+
+      requestDurationMilliseconds += parseFloat(
+        response.headers.get("x-ms-request-duration-ms") as string,
       );
 
       const result = await response.json();
@@ -255,6 +283,7 @@ async function getValueArrayForPkRange(
 
   return {
     records,
-    queryCharge,
+    requestCharge,
+    requestDurationMilliseconds,
   };
 }

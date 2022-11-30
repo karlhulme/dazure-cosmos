@@ -1,0 +1,19 @@
+{
+  "scriptId": "211",
+  "url": "file:///Users/karlhulme/Github/deno/dazure-cosmos/src/generateCosmosReqHeaders.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1369, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "generateCosmosReqHeaders",
+      "ranges": [
+        { "startOffset": 595, "endOffset": 1368, "count": 9 },
+        { "startOffset": 731, "endOffset": 736, "count": 2 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

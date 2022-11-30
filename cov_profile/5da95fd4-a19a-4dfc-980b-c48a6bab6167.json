@@ -1,0 +1,16 @@
+{
+  "scriptId": "232",
+  "url": "https://raw.githubusercontent.com/karlhulme/dpiggle/main/src/core/isTransitoryNetworkError.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 888, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "isTransitoryNetworkError",
+      "ranges": [{ "startOffset": 448, "endOffset": 887, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

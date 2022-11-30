@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "test": "rm -rf cov_profile && deno test --allow-env --allow-net --coverage=cov_profile && deno coverage cov_profile && deno fmt"
+  }
+}

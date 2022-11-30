@@ -3,6 +3,17 @@ import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
+interface DeleteDocumentOptions {
+  sessionToken?: string;
+}
+
+interface DeleteDocumentResult {
+  didDelete: boolean;
+  sessionToken: string;
+  requestCharge: number;
+  requestDurationMilliseconds: number;
+}
+
 /**
  * Returns true if the document was deleted.  Returns false if the document
  * does not exist.  In all other cases an error is raised.
@@ -14,7 +25,8 @@ export async function deleteDocument(
   collectionName: string,
   partition: string,
   documentId: string,
-): Promise<boolean> {
+  options: DeleteDocumentOptions,
+): Promise<DeleteDocumentResult> {
   const reqHeaders = await generateCosmosReqHeaders({
     key: cryptoKey,
     method: "DELETE",
@@ -23,7 +35,13 @@ export async function deleteDocument(
       `dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
   });
 
-  const didDelete = await cosmosRetryable(async () => {
+  const optionalHeaders: Record<string, string> = {};
+
+  if (options.sessionToken) {
+    optionalHeaders["x-ms-session-token"] = options.sessionToken;
+  }
+
+  const result = await cosmosRetryable(async () => {
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
       {
@@ -36,6 +54,7 @@ export async function deleteDocument(
           "x-ms-documentdb-partitionkey": formatPartitionKeyValue(
             partition,
           ),
+          ...optionalHeaders,
         },
       },
     );
@@ -51,8 +70,17 @@ export async function deleteDocument(
 
     await response.body?.cancel();
 
-    return response.ok;
+    return {
+      didDelete: response.ok,
+      sessionToken: response.headers.get("x-ms-session-token") as string,
+      requestCharge: parseFloat(
+        response.headers.get("x-ms-request-charge") as string,
+      ),
+      requestDurationMilliseconds: parseFloat(
+        response.headers.get("x-ms-request-duration-ms") as string,
+      ),
+    };
   });
 
-  return didDelete;
+  return result;
 }
