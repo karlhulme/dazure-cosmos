@@ -2,6 +2,12 @@ import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 
+/**
+ * Creates a new database.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to the database.
+ * @param databaseName The name of the new database.
+ */
 export async function createDatabase(
   cryptoKey: CryptoKey,
   cosmosUrl: string,

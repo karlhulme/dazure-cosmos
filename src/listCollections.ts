@@ -2,6 +2,13 @@ import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 
+/**
+ * Returns an array of the collection names for
+ * the given database.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to a database.
+ * @param databaseName The name of a database.
+ */
 export async function listCollections(
   cryptoKey: CryptoKey,
   cosmosUrl: string,

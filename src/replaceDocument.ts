@@ -3,22 +3,57 @@ import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
+/**
+ * The result of replacing a document.
+ */
 interface ReplaceDocumentResult {
+  /**
+   * True if a document was replaced.
+   */
   didReplace: boolean;
+
+  /**
+   * A session token
+   */
   sessionToken: string;
+
+  /**
+   * The number of RUs consumed by the request.
+   */
   requestCharge: number;
+
+  /**
+   * The number of milliseconds spent serving the request.
+   */
   requestDurationMilliseconds: number;
 }
 
+/**
+ * Options for when replacing a document.
+ */
 interface ReplaceDocumentOptions {
+  /**
+   * The etag value that must be present on the existing document
+   * if it is to be replaced.  If the document was not replaced
+   * then didReplace will be false on the result object.
+   */
   ifMatch?: string;
+
+  /**
+   * A session token.
+   */
   sessionToken?: string;
 }
 
 /**
- * Returns true if the document was successfully replaced.  Returns false
- * if the specified version is not found and the document is not replaced.
- * In all other cases an error is raised.
+ * Replaces a document with the given document.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to a database.
+ * @param databaseName The name of a database.
+ * @param collectionName The name of a collection.
+ * @param partition A partition key value.
+ * @param document A document.
+ * @param options A property bag of options.
  */
 export async function replaceDocument(
   cryptoKey: CryptoKey,

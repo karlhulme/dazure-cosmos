@@ -3,7 +3,13 @@ import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
+/**
+ * Options for querying a gateway.
+ */
 interface QueryDocumentsGatewayOptions {
+  /**
+   * A session token.
+   */
   sessionToken?: string;
 }
 

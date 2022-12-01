@@ -8,13 +8,13 @@ Support for:
 - Listing, creating and deleting databases.
 - Listing, creating and deleting collections.
 - Retrieving, replacing and deleting individual documents.
-- Querying a container using the gateway.
-- Querying multiple physicl containers using pkranges.
+- Querying a logical container using the gateway.
+- Querying multiple physical containers using pkranges (required for using
+  aggregates like SUM).
 
 ## Todo
 
 - Complete test coverage
-- Complete comments
 
 ## Environment variables
 

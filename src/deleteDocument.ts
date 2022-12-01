@@ -7,16 +7,40 @@ interface DeleteDocumentOptions {
   sessionToken?: string;
 }
 
+/**
+ * The result of deleting a document.
+ */
 interface DeleteDocumentResult {
+  /**
+   * True if a document was deleted.
+   */
   didDelete: boolean;
+
+  /**
+   * A session token.
+   */
   sessionToken: string;
+
+  /**
+   * The number of RUs consumed by the request.
+   */
   requestCharge: number;
+
+  /**
+   * The number of milliseconds spent serving the request.
+   */
   requestDurationMilliseconds: number;
 }
 
 /**
- * Returns true if the document was deleted.  Returns false if the document
- * does not exist.  In all other cases an error is raised.
+ * Deletes the document with the given document id.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to a database.
+ * @param databaseName The name of a database.
+ * @param collectionName The name of a collection.
+ * @param partition A partition key value.
+ * @param documentId The id of a document.
+ * @param options A property bag of options.
  */
 export async function deleteDocument(
   cryptoKey: CryptoKey,

@@ -9,7 +9,13 @@ import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts"
 // More information at this link:
 // https://docs.microsoft.com/en-us/rest/api/cosmos-db/querying-cosmosdb-resources-using-the-rest-api
 
+/**
+ * Options for querying a document container.
+ */
 interface QueryDocumentsContainerOptions {
+  /**
+   * A session token.
+   */
   sessionToken?: string;
 }
 
@@ -41,6 +47,11 @@ interface QueryDocumentsContainerDirectResult {
    * The resultant cost of the query.
    */
   requestCharge: number;
+
+  /**
+   * The duration of the request in milliseconds.
+   */
+  requestDurationMilliseconds: number;
 }
 
 /**
@@ -55,7 +66,9 @@ interface QueryDocumentsContainerDirectResult {
  * @param cosmosUrl The cosmos url.
  * @param databaseName The database name.
  * @param collectionName The collection name.
- * @param query The query to execute.
+ * @param query The query to execute.  If you're intending to use the 'sum'
+ * transform then you typically want a value select statement similar to
+ * SELECT VALUE SUM(d.field).
  * @param parameters The parameter to substitute into the query.
  * @param transform A function that is given the results retrieved
  * from each of the logical containers where the query was executed.
@@ -134,9 +147,18 @@ export async function queryDocumentsContainersDirect(
   return {
     data,
     requestCharge,
+    requestDurationMilliseconds,
   };
 }
 
+/**
+ * Returns the partition key ranges for a container.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to a database.
+ * @param databaseName The name of a database.
+ * @param collectionName The name of a collection.
+ * @param options A property bag of options.
+ */
 async function getPkRangesForContainer(
   cryptoKey: CryptoKey,
   cosmosUrl: string,
@@ -194,6 +216,18 @@ async function getPkRangesForContainer(
   return pkRanges;
 }
 
+/**
+ * Returns the result of executing the given query against
+ * the given partition key ranges.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to a database.
+ * @param databaseName The name of a database.
+ * @param collectionName The name of a collection.
+ * @param pkRange A partition key range.
+ * @param query A cosmos SQL query.
+ * @param parameters An array of cosmos SQL parameters.
+ * @param options A property bag of options.
+ */
 async function getValueArrayForPkRange(
   cryptoKey: CryptoKey,
   cosmosUrl: string,

@@ -2,16 +2,43 @@ import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 
+/**
+ * Represents the definition of a partition key.
+ */
 interface CosmosPartitionKey {
+  /**
+   * The paths of a partition key.
+   */
   paths: string[];
+
+  /**
+   * The type of a partition key.
+   */
   kind: "Hash";
 }
 
+/**
+ * Information about a cosmos collection.
+ */
 interface CosmosCollection {
+  /**
+   * The id of a collection.
+   */
   id: string;
+
+  /**
+   * The definition of the partition key for a collection.
+   */
   partitionKey: CosmosPartitionKey;
 }
 
+/**
+ * Returns partition key information for a collection.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl A url to a database.
+ * @param databaseName The name of a database.
+ * @param collectionName The name of a collection.
+ */
 export async function getCollection(
   cryptoKey: CryptoKey,
   cosmosUrl: string,

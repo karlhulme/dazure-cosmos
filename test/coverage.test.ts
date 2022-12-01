@@ -4,6 +4,7 @@ import {
   getDocument,
   listCollections,
   listDatabases,
+  queryDocumentsContainersDirect,
   queryDocumentsGateway,
 } from "../src/index.ts";
 
@@ -34,11 +35,11 @@ Deno.test("List databases and collections.", async () => {
 
   assertEquals(
     collectionNames.sort(),
-    ["movies"],
+    ["albums", "movies"],
   );
 });
 
-Deno.test("Query documents container.", async () => {
+Deno.test("Query documents using gateway.", async () => {
   const cryptoKey = await convertCosmosKeyToCryptoKey(testCosmosKey);
 
   const queryResult = await queryDocumentsGateway(
@@ -58,6 +59,27 @@ Deno.test("Query documents container.", async () => {
   assertEquals(queryResult.records.length, 1);
   assert(queryResult.requestCharge > 0);
   assert(queryResult.requestDurationMilliseconds > 0);
+});
+
+Deno.test("Query documents using containers directly.", async () => {
+  const cryptoKey = await convertCosmosKeyToCryptoKey(testCosmosKey);
+
+  const queryResult = await queryDocumentsContainersDirect(
+    cryptoKey,
+    testCosmosUrl,
+    "deno",
+    "albums",
+    "SELECT VALUE SUM(d.trackCount) FROM Docs d WHERE d.id = @id1 OR d.id = @id2 OR d.id = @id3",
+    [
+      { name: "@id1", value: "001" },
+      { name: "@id2", value: "002" },
+      { name: "@id3", value: "003" },
+    ],
+    "sum",
+    {},
+  );
+
+  assertEquals(queryResult.data, 42);
 });
 
 Deno.test("Get single document.", async () => {

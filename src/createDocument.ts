@@ -3,22 +3,57 @@ import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
+/**
+ * The options to use when creating the document.
+ */
 interface CreateDocumentOptions {
+  /**
+   * True if the document is to be upserted over an original.
+   * If not set, the document must not exist otherwise the
+   * operation will fail.
+   */
   upsertDocument?: boolean;
+
+  /**
+   * A session token.
+   */
   sessionToken?: string;
 }
 
+/**
+ * The result of creating a new document.
+ */
 interface CreateDocumentResult {
+  /**
+   * True if a new document was created.
+   */
   didCreate: boolean;
+
+  /**
+   * A session token.
+   */
   sessionToken: string;
+
+  /**
+   * The number of RUs consumed by the request.
+   */
   requestCharge: number;
+
+  /**
+   * The number of milliseconds spent serving the request.
+   */
   requestDurationMilliseconds: number;
 }
 
 /**
- * Returns true if a new document was created.  Returns false if an
- * existing document was replaced because the upsert option was specified.
- * In all other cases an error is raised.
+ * Creates a new document.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to the database.
+ * @param databaseName The name of the database.
+ * @param collectionName The name of the collection.
+ * @param partition The partition for the new document.
+ * @param document The data for the new document.
+ * @param options A property bag of options.
  */
 export async function createDocument(
   cryptoKey: CryptoKey,

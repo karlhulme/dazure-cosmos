@@ -2,10 +2,23 @@ import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 
+/**
+ * The result of deleting a collection.
+ */
 interface DeleteCollectionResult {
+  /**
+   * True if a collection was deleted.
+   */
   didDelete: boolean;
 }
 
+/**
+ * Deletes a collection.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to a database.
+ * @param databaseName The name of a database.
+ * @param collectionName The name of the collection to delete.
+ */
 export async function deleteCollection(
   cryptoKey: CryptoKey,
   cosmosUrl: string,

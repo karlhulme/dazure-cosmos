@@ -2,10 +2,22 @@ import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
 
+/**
+ * The result of deleting a database.
+ */
 interface DeleteDatabaseResult {
+  /**
+   * True if a database was deleted.
+   */
   didDelete: boolean;
 }
 
+/**
+ * Deletes a database.
+ * @param cryptoKey A crypto key.
+ * @param cosmosUrl The url to a database.
+ * @param databaseName The name of a database.
+ */
 export async function deleteDatabase(
   cryptoKey: CryptoKey,
   cosmosUrl: string,
