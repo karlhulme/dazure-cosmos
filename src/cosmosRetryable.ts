@@ -2,6 +2,7 @@ import { retryable } from "../deps.ts";
 
 /**
  * The default retry strategy for cosmos operations.
+ * This will last approximately 12.5 seconds in total.
  */
 export const CosmosDefaultRetryStrategy: number[] = [
   100,
