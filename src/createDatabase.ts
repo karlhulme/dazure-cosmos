@@ -1,6 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
-import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
+import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
 
 /**
  * Creates a new database.
@@ -33,7 +33,7 @@ export async function createDatabase(
       }),
     });
 
-    handleCosmosTransitoryErrors(response);
+    ensureRaisingOfTransitoryErrors(response);
 
     if (!response.ok) {
       throw new Error(`Unable to create database.\n${await response.text()}`);

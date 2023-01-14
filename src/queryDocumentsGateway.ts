@@ -1,6 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
-import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
+import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
 /**
@@ -121,7 +121,7 @@ export async function queryDocumentsGateway(
         },
       );
 
-      handleCosmosTransitoryErrors(response);
+      ensureRaisingOfTransitoryErrors(response);
 
       if (!response.ok) {
         const errMsg =

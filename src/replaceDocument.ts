@@ -1,6 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
-import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
+import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
 /**
@@ -105,7 +105,7 @@ export async function replaceDocument(
       },
     );
 
-    handleCosmosTransitoryErrors(response);
+    ensureRaisingOfTransitoryErrors(response);
 
     // 412 errors means the pre-condition failed and the document
     // wasn't updated.  In this circumstance we cancel reading from

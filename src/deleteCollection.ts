@@ -1,6 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
-import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
+import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
 
 /**
  * The result of deleting a collection.
@@ -46,7 +46,7 @@ export async function deleteCollection(
       },
     );
 
-    handleCosmosTransitoryErrors(response);
+    ensureRaisingOfTransitoryErrors(response);
 
     if (!response.ok && response.status !== 404) {
       throw new Error(`Unable to delete collection.\n${await response.text()}`);

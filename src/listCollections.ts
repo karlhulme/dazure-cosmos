@@ -1,6 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
-import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
+import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
 
 /**
  * Returns an array of the collection names for
@@ -31,7 +31,7 @@ export async function listCollections(
       },
     });
 
-    handleCosmosTransitoryErrors(response);
+    ensureRaisingOfTransitoryErrors(response);
 
     if (!response.ok) {
       throw new Error(`Unable to list collections.\n${await response.text()}`);

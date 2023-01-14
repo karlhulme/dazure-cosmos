@@ -1,6 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
-import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
+import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
 import { formatPartitionKeyValue } from "./formatPartitionKeyValue.ts";
 
 interface DeleteDocumentOptions {
@@ -83,7 +83,7 @@ export async function deleteDocument(
       },
     );
 
-    handleCosmosTransitoryErrors(response);
+    ensureRaisingOfTransitoryErrors(response);
 
     if (!response.ok && response.status !== 404) {
       throw new Error(

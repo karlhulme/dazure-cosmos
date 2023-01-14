@@ -1,6 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
-import { handleCosmosTransitoryErrors } from "./handleCosmosTransitoryErrors.ts";
+import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
 
 // Any query that requires state across continuations cannot be served by the gateway.
 // This covers cross-partition queries that require use of TOP, ORDER BY, OFFSET LIMIT,
@@ -193,7 +193,7 @@ async function getPkRangesForContainer(
       },
     );
 
-    handleCosmosTransitoryErrors(response);
+    ensureRaisingOfTransitoryErrors(response);
 
     if (!response.ok) {
       const errMsg =
@@ -284,7 +284,7 @@ async function getValueArrayForPkRange(
         },
       );
 
-      handleCosmosTransitoryErrors(response);
+      ensureRaisingOfTransitoryErrors(response);
 
       if (!response.ok) {
         const errMsg =

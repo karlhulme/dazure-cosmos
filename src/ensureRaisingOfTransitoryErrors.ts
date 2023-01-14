@@ -6,7 +6,7 @@ import { OperationTransitoryError } from "../deps.ts";
  * a transitory error then this function takes no action.
  * @param response A fetch response.
  */
-export function handleCosmosTransitoryErrors(response: Response) {
+export function ensureRaisingOfTransitoryErrors(response: Response) {
   if (response.status === 429) {
     throw new OperationTransitoryError("Too many requests.");
   }
