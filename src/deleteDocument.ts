@@ -51,14 +51,6 @@ export async function deleteDocument(
   documentId: string,
   options: DeleteDocumentOptions,
 ): Promise<DeleteDocumentResult> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "DELETE",
-    resourceType: "docs",
-    resourceLink:
-      `dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
-  });
-
   const optionalHeaders: Record<string, string> = {};
 
   if (options.sessionToken) {
@@ -66,6 +58,14 @@ export async function deleteDocument(
   }
 
   const result = await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "DELETE",
+      resourceType: "docs",
+      resourceLink:
+        `dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
+    });
+
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
       {

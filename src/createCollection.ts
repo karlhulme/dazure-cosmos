@@ -15,14 +15,14 @@ export async function createCollection(
   databaseName: string,
   collectionName: string,
 ) {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "POST",
-    resourceType: "colls",
-    resourceLink: `dbs/${databaseName}`,
-  });
-
   await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "POST",
+      resourceType: "colls",
+      resourceLink: `dbs/${databaseName}`,
+    });
+
     const response = await fetch(`${cosmosUrl}/dbs/${databaseName}/colls`, {
       method: "POST",
       headers: {

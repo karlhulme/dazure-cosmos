@@ -52,14 +52,6 @@ export async function getDocument(
   documentId: string,
   options: GetDocumentOptions,
 ): Promise<GetDocumentResult> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "GET",
-    resourceType: "docs",
-    resourceLink:
-      `dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
-  });
-
   const optionalHeaders: Record<string, string> = {};
 
   if (options.sessionToken) {
@@ -67,6 +59,14 @@ export async function getDocument(
   }
 
   const result = await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "GET",
+      resourceType: "docs",
+      resourceLink:
+        `dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
+    });
+
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs/${documentId}`,
       {

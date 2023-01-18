@@ -64,28 +64,28 @@ export async function replaceDocument(
   document: Record<string, unknown>,
   options: ReplaceDocumentOptions,
 ): Promise<ReplaceDocumentResult> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "PUT",
-    resourceType: "docs",
-    resourceLink:
-      `dbs/${databaseName}/colls/${collectionName}/docs/${document.id}`,
-  });
+  const optionalHeaders: Record<string, string> = {};
+
+  if (options.ifMatch) {
+    optionalHeaders["If-Match"] = options.ifMatch;
+  }
+
+  if (options.sessionToken) {
+    optionalHeaders["x-ms-session-token"] = options.sessionToken;
+  }
+
+  if (document.partitionKey !== partition) {
+    document.partitionKey = partition;
+  }
 
   const result = await cosmosRetryable(async () => {
-    const optionalHeaders: Record<string, string> = {};
-
-    if (options.ifMatch) {
-      optionalHeaders["If-Match"] = options.ifMatch;
-    }
-
-    if (options.sessionToken) {
-      optionalHeaders["x-ms-session-token"] = options.sessionToken;
-    }
-
-    if (document.partitionKey !== partition) {
-      document.partitionKey = partition;
-    }
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "PUT",
+      resourceType: "docs",
+      resourceLink:
+        `dbs/${databaseName}/colls/${collectionName}/docs/${document.id}`,
+    });
 
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs/${document.id}`,

@@ -74,13 +74,6 @@ export async function queryDocumentsGateway(
   parameters: CosmosQueryParameter[],
   options: QueryDocumentsGatewayOptions,
 ): Promise<QueryDocumentsGatewayResult> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "POST",
-    resourceType: "docs",
-    resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
-  });
-
   const records: Record<string, unknown>[] = [];
 
   let continuationToken: string | null = null;
@@ -100,6 +93,13 @@ export async function queryDocumentsGateway(
     }
 
     await cosmosRetryable(async () => {
+      const reqHeaders = await generateCosmosReqHeaders({
+        key: cryptoKey,
+        method: "POST",
+        resourceType: "docs",
+        resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
+      });
+
       const response = await fetch(
         `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs`,
         {

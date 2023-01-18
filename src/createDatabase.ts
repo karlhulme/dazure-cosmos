@@ -13,13 +13,13 @@ export async function createDatabase(
   cosmosUrl: string,
   databaseName: string,
 ) {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "POST",
-    resourceType: "dbs",
-  });
-
   await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "POST",
+      resourceType: "dbs",
+    });
+
     const response = await fetch(`${cosmosUrl}/dbs`, {
       method: "POST",
       headers: {

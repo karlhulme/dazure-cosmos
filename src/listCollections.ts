@@ -14,14 +14,14 @@ export async function listCollections(
   cosmosUrl: string,
   databaseName: string,
 ): Promise<string[]> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "GET",
-    resourceType: "colls",
-    resourceLink: `dbs/${databaseName}`,
-  });
-
   const list = await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "GET",
+      resourceType: "colls",
+      resourceLink: `dbs/${databaseName}`,
+    });
+
     const response = await fetch(`${cosmosUrl}/dbs/${databaseName}/colls`, {
       headers: {
         Authorization: reqHeaders.authorizationHeader,

@@ -25,14 +25,14 @@ export async function deleteCollection(
   databaseName: string,
   collectionName: string,
 ): Promise<DeleteCollectionResult> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "DELETE",
-    resourceType: "colls",
-    resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
-  });
-
   const result = await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "DELETE",
+      resourceType: "colls",
+      resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
+    });
+
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}`,
       {

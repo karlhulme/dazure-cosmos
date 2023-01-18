@@ -12,13 +12,13 @@ export async function listDatabases(
   cryptoKey: CryptoKey,
   cosmosUrl: string,
 ): Promise<string[]> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "GET",
-    resourceType: "dbs",
-  });
-
   const list = await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "GET",
+      resourceType: "dbs",
+    });
+
     const response = await fetch(`${cosmosUrl}/dbs`, {
       headers: {
         Authorization: reqHeaders.authorizationHeader,

@@ -166,13 +166,6 @@ async function getPkRangesForContainer(
   collectionName: string,
   options: QueryDocumentsContainerOptions,
 ) {
-  const pkRangesReqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "GET",
-    resourceType: "pkranges",
-    resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
-  });
-
   const optionalHeaders: Record<string, string> = {};
 
   if (options.sessionToken) {
@@ -180,6 +173,13 @@ async function getPkRangesForContainer(
   }
 
   const pkRanges = await cosmosRetryable(async () => {
+    const pkRangesReqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "GET",
+      resourceType: "pkranges",
+      resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
+    });
+
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/pkranges`,
       {
@@ -238,13 +238,6 @@ async function getValueArrayForPkRange(
   parameters: CosmosQueryParameter[],
   options: QueryDocumentsContainerOptions,
 ) {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "POST",
-    resourceType: "docs",
-    resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
-  });
-
   const records: unknown[] = [];
 
   let continuationToken: string | null = null;
@@ -264,6 +257,13 @@ async function getValueArrayForPkRange(
     }
 
     await cosmosRetryable(async () => {
+      const reqHeaders = await generateCosmosReqHeaders({
+        key: cryptoKey,
+        method: "POST",
+        resourceType: "docs",
+        resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
+      });
+
       const response = await fetch(
         `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs`,
         {

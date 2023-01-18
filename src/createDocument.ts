@@ -64,14 +64,14 @@ export async function createDocument(
   document: Record<string, unknown>,
   options: CreateDocumentOptions,
 ): Promise<CreateDocumentResult> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "POST",
-    resourceType: "docs",
-    resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
-  });
-
   const result = await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "POST",
+      resourceType: "docs",
+      resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
+    });
+
     const optionalHeaders: Record<string, string> = {};
 
     if (options.upsertDocument) {

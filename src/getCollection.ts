@@ -45,14 +45,14 @@ export async function getCollection(
   databaseName: string,
   collectionName: string,
 ): Promise<CosmosCollection> {
-  const reqHeaders = await generateCosmosReqHeaders({
-    key: cryptoKey,
-    method: "GET",
-    resourceType: "colls",
-    resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
-  });
-
   const collection = await cosmosRetryable(async () => {
+    const reqHeaders = await generateCosmosReqHeaders({
+      key: cryptoKey,
+      method: "GET",
+      resourceType: "colls",
+      resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
+    });
+
     const response = await fetch(
       `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}`,
       {
