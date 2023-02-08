@@ -1,7 +1,6 @@
 import { generateCosmosReqHeaders } from "./generateCosmosReqHeaders.ts";
 import { cosmosRetryable } from "./cosmosRetryable.ts";
 import { ensureRaisingOfTransitoryErrors } from "./ensureRaisingOfTransitoryErrors.ts";
-import { doLogPerformance } from "./logPerformance.ts";
 
 // Any query that requires state across continuations cannot be served by the gateway.
 // This covers cross-partition queries that require use of TOP, ORDER BY, OFFSET LIMIT,
@@ -239,95 +238,86 @@ async function getValueArrayForPkRange(
   parameters: CosmosQueryParameter[],
   options: QueryDocumentsContainerOptions,
 ) {
-  const start = doLogPerformance ? performance.now() : 0;
+  const records: unknown[] = [];
 
-  try {
-    const records: unknown[] = [];
+  let continuationToken: string | null = null;
+  let requestCharge = 0.0;
+  let requestDurationMilliseconds = 0.0;
+  let isAllRecordsLoaded = false;
 
-    let continuationToken: string | null = null;
-    let requestCharge = 0.0;
-    let requestDurationMilliseconds = 0.0;
-    let isAllRecordsLoaded = false;
+  while (!isAllRecordsLoaded) {
+    const optionalHeaders: Record<string, string> = {};
 
-    while (!isAllRecordsLoaded) {
-      const optionalHeaders: Record<string, string> = {};
+    if (continuationToken) {
+      optionalHeaders["x-ms-continuation"] = continuationToken;
+    }
 
-      if (continuationToken) {
-        optionalHeaders["x-ms-continuation"] = continuationToken;
-      }
+    if (options.sessionToken) {
+      optionalHeaders["x-ms-session-token"] = options.sessionToken;
+    }
 
-      if (options.sessionToken) {
-        optionalHeaders["x-ms-session-token"] = options.sessionToken;
-      }
-
-      await cosmosRetryable(async () => {
-        const reqHeaders = await generateCosmosReqHeaders({
-          key: cryptoKey,
-          method: "POST",
-          resourceType: "docs",
-          resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
-        });
-
-        const response = await fetch(
-          `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: reqHeaders.authorizationHeader,
-              "x-ms-date": reqHeaders.xMsDateHeader,
-              "content-type": "application/query+json",
-              "x-ms-version": reqHeaders.xMsVersion,
-              "x-ms-documentdb-partitionkeyrangeid": pkRange,
-              "x-ms-documentdb-query-enablecrosspartition": "True",
-              ...optionalHeaders,
-            },
-            body: JSON.stringify({
-              query,
-              parameters,
-            }),
-          },
-        );
-
-        ensureRaisingOfTransitoryErrors(response);
-
-        if (!response.ok) {
-          const errMsg =
-            `Unable to query collection (container-direct-mode) ${databaseName}/${collectionName}/${pkRange} with query ${query} and parameters ${
-              JSON.stringify(parameters)
-            }.\n${await response.text()}`;
-
-          throw new Error(errMsg);
-        }
-
-        continuationToken = response.headers.get("x-ms-continuation");
-
-        if (!continuationToken) {
-          isAllRecordsLoaded = true;
-        }
-
-        requestCharge += parseFloat(
-          response.headers.get("x-ms-request-charge") as string,
-        );
-
-        requestDurationMilliseconds += parseFloat(
-          response.headers.get("x-ms-request-duration-ms") as string,
-        );
-
-        const result = await response.json();
-
-        records.push(...result.Documents);
+    await cosmosRetryable(async () => {
+      const reqHeaders = await generateCosmosReqHeaders({
+        key: cryptoKey,
+        method: "POST",
+        resourceType: "docs",
+        resourceLink: `dbs/${databaseName}/colls/${collectionName}`,
       });
-    }
 
-    return {
-      records,
-      requestCharge,
-      requestDurationMilliseconds,
-    };
-  } finally {
-    if (doLogPerformance) {
-      const duration = performance.now() - start;
-      console.log(`QUERY_DIRECT ${collectionName} ${duration.toFixed(1)}ms`);
-    }
+      const response = await fetch(
+        `${cosmosUrl}/dbs/${databaseName}/colls/${collectionName}/docs`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: reqHeaders.authorizationHeader,
+            "x-ms-date": reqHeaders.xMsDateHeader,
+            "content-type": "application/query+json",
+            "x-ms-version": reqHeaders.xMsVersion,
+            "x-ms-documentdb-partitionkeyrangeid": pkRange,
+            "x-ms-documentdb-query-enablecrosspartition": "True",
+            ...optionalHeaders,
+          },
+          body: JSON.stringify({
+            query,
+            parameters,
+          }),
+        },
+      );
+
+      ensureRaisingOfTransitoryErrors(response);
+
+      if (!response.ok) {
+        const errMsg =
+          `Unable to query collection (container-direct-mode) ${databaseName}/${collectionName}/${pkRange} with query ${query} and parameters ${
+            JSON.stringify(parameters)
+          }.\n${await response.text()}`;
+
+        throw new Error(errMsg);
+      }
+
+      continuationToken = response.headers.get("x-ms-continuation");
+
+      if (!continuationToken) {
+        isAllRecordsLoaded = true;
+      }
+
+      requestCharge += parseFloat(
+        response.headers.get("x-ms-request-charge") as string,
+      );
+
+      requestDurationMilliseconds += parseFloat(
+        response.headers.get("x-ms-request-duration-ms") as string,
+      );
+
+      const result = await response.json();
+
+      records.push(...result.Documents);
+    });
   }
+
+  return {
+    records,
+    requestCharge,
+    requestDurationMilliseconds,
+  };
 }
