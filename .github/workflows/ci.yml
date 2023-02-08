@@ -29,9 +29,8 @@ jobs:
       - name: Run linter
         run: deno lint
 
-      # No tests yet!!
-      # - name: Run tests
-      #   run: deno task test
+      - name: Run tests
+        run: deno task test
 
       - name: Bump version and push tag
         uses: mathieudutour/github-tag-action@v6.1
