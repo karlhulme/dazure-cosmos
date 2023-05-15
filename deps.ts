@@ -6,7 +6,7 @@ export {
 export {
   OperationTransitoryError,
   retryable,
-} from "https://raw.githubusercontent.com/karlhulme/dpiggle/main/mod.ts";
+} from "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/mod.ts";
 
 export {
   assert,

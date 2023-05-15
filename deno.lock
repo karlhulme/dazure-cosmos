@@ -26,13 +26,13 @@
     "https://deno.land/x/mock@0.13.0/spy.ts": "4f313c6b8ccf613010f9ef4f6f7b178e38bb30d12904746d3ad23da859782313",
     "https://deno.land/x/mock@0.13.0/stub.ts": "4cbf836fed2916d5293ac4fb8b185f5a28dd7e814beb5ea8113ea37c4e6e5593",
     "https://deno.land/x/mock@0.13.0/time.ts": "9e685cf14541abbb40818b48801973c821d0ef3e439e0afda51da6c2b5005d49",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/deps.ts": "1650421e2137773fa808fae9206a3ff1da51808b92ed0db5ac8455b0d2e06790",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/mod.ts": "242727cba09291256f94e84725041dd8145fe9e2863cbb14256bef27e2c6524a",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/src/core/index.ts": "ff9b618a9e5154296c7ff2fc8450c913561788122fe2b47a7248e6bbc4de760c",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/src/core/isTransitoryNetworkError.ts": "5b633205cd7950b2491876340adaf8b9b555e537f627ca17048d6eb6fadaea11",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/src/core/retryable.ts": "afa8fd2debcf572c60bc247f2ac10d9c4cc7e89642f0ed98ea23ad6909afaf5f",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/src/errors/OperationInterruptedError.ts": "1165d717d1486ca546b28004164684f5e06f159c501e29eaa9579756f841b4d8",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/src/errors/OperationTransitoryError.ts": "33ad4ea5c977b09ed79f79f01491240a6bd45197efee7ec9ce878b935aa8a4f0",
-    "https://raw.githubusercontent.com/karlhulme/dpiggle/main/src/errors/index.ts": "1f0cef71207cbb97cdb2e2b706a6e79bdfe4e9d0b1c2863f103411155d150f04"
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/deps.ts": "1650421e2137773fa808fae9206a3ff1da51808b92ed0db5ac8455b0d2e06790",
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/mod.ts": "242727cba09291256f94e84725041dd8145fe9e2863cbb14256bef27e2c6524a",
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/src/core/index.ts": "ff9b618a9e5154296c7ff2fc8450c913561788122fe2b47a7248e6bbc4de760c",
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/src/core/isTransitoryNetworkError.ts": "5b633205cd7950b2491876340adaf8b9b555e537f627ca17048d6eb6fadaea11",
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/src/core/retryable.ts": "afa8fd2debcf572c60bc247f2ac10d9c4cc7e89642f0ed98ea23ad6909afaf5f",
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/src/errors/OperationInterruptedError.ts": "1165d717d1486ca546b28004164684f5e06f159c501e29eaa9579756f841b4d8",
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/src/errors/OperationTransitoryError.ts": "33ad4ea5c977b09ed79f79f01491240a6bd45197efee7ec9ce878b935aa8a4f0",
+    "https://raw.githubusercontent.com/karlhulme/dpiggle/v0.0.1/src/errors/index.ts": "1f0cef71207cbb97cdb2e2b706a6e79bdfe4e9d0b1c2863f103411155d150f04"
   }
 }
